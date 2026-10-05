@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#cfd0cc">
+  <title>Portfolio – Galerie des métiers du bâtiment</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --beton: #cfd0cc;
+      --platre: #f2f2ef;
+      --encre: #1b2430;
+      --gris: #4b5663;
+      --bleu: #1f4e8c;
+      --police-titre: "Archivo", "Helvetica Neue", Arial, sans-serif;
+      --police-texte: "Newsreader", Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--beton);
+      color: var(--encre);
+      font-family: var(--police-titre);
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    canvas { display: block; position: fixed; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+
+    button {
+      font: 600 15px/1 var(--police-titre);
+      color: var(--encre);
+      background: var(--platre);
+      border: 1.5px solid var(--encre);
+      border-radius: 4px;
+      min-height: 44px;
+      padding: 0 18px;
+      cursor: pointer;
+    }
+    button:hover { background: #fff; }
+    button:focus-visible, dialog button:focus-visible { outline: 3px solid var(--bleu); outline-offset: 2px; }
+    button[aria-current="true"] { background: var(--bleu); border-color: var(--bleu); color: #fff; }
+
+    /* ---------- Bandeau d'identité ---------- */
+    #identite {
+      position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left));
+      z-index: 5; padding: 12px 16px 12px 18px;
+      background: rgba(242, 242, 239, .94);
+      border-left: 6px solid var(--bleu);
+      max-width: calc(100vw - 28px);
+    }
+    #identite strong { display: block; font-weight: 800; font-size: 20px; letter-spacing: -.01em; }
+    #identite span { font: italic 400 17px/1.3 var(--police-texte); color: var(--gris); }
+
+    /* ---------- Outils (haut droite) ---------- */
+    #outils {
+      position: fixed; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
+      z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    #vr-slot { display: contents; }
+    #vr-slot button {
+      position: static !important; width: auto !important; left: auto !important; bottom: auto !important;
+      transform: none !important; opacity: 1 !important;
+      font: 700 15px/1 var(--police-titre) !important;
+      background: var(--bleu) !important; color: #fff !important;
+      border: 1.5px solid var(--bleu) !important; border-radius: 4px !important;
+      min-height: 44px; padding: 0 18px !important;
+    }
+    #vr-slot button[disabled], #vr-slot button:disabled { background: rgba(242,242,239,.94) !important; color: var(--gris) !important; border-color: var(--gris) !important; cursor: default !important; }
+
+    /* ---------- Commandes (bas) ---------- */
+    #bas {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+      padding: 0 max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      pointer-events: none;
+    }
+    #bas > * { pointer-events: auto; }
+    #sommaire { display: flex; gap: 6px; max-width: 100%; overflow-x: auto; padding: 2px; scrollbar-width: none; }
+    #sommaire::-webkit-scrollbar { display: none; }
+    #sommaire button { white-space: nowrap; min-height: 40px; padding: 0 14px; font-size: 14px; }
+    #commandes {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(242, 242, 239, .94); padding: 8px; border-radius: 6px;
+    }
+    #station { min-width: 150px; max-width: 42vw; text-align: center; line-height: 1.25; }
+    #s-label { display: block; font-weight: 700; font-size: 16px; }
+    #s-compteur { display: block; font: 400 15px var(--police-texte); color: var(--gris); }
+    #aide { margin: 0; font: italic 400 15px/1.3 var(--police-texte); color: var(--encre); text-align: center; text-shadow: 0 0 6px var(--beton); }
+
+    /* ---------- Chargement et message ---------- */
+    #chargement, #message {
+      position: fixed; inset: 0; z-index: 20; display: grid; place-content: center; gap: 12px;
+      background: var(--beton); text-align: center; padding: 24px;
+    }
+    #chargement { font: 700 26px var(--police-titre); transition: opacity .5s; }
+    #chargement::after { content: ""; width: 90px; height: 6px; background: var(--bleu); justify-self: center; animation: niveau 1.4s ease-in-out infinite alternate; }
+    @keyframes niveau { from { width: 30px; } to { width: 150px; } }
+    #chargement.fini { opacity: 0; pointer-events: none; }
+    #message h1 { margin: 0; font: 800 26px var(--police-titre); }
+    #message p { margin: 0; max-width: 56ch; font: 400 19px/1.5 var(--police-texte); }
+
+    /* ---------- Version texte ---------- */
+    dialog {
+      width: min(720px, calc(100vw - 28px)); max-height: 86vh; padding: 0;
+      border: 0; border-top: 8px solid var(--bleu); border-radius: 4px;
+      background: var(--platre); color: var(--encre);
+    }
+    dialog::backdrop { background: rgba(27, 36, 48, .55); }
+    .dlg-tete { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px 0; }
+    .dlg-tete h2 { margin: 0; font: 800 22px var(--police-titre); }
+    #texte-contenu { padding: 8px 22px 24px; font: 400 18px/1.55 var(--police-texte); }
+    #texte-contenu h3 { margin: 24px 0 6px; font: 800 20px var(--police-titre); }
+    #texte-contenu p { margin: 0 0 10px; max-width: 70ch; }
+    #texte-contenu ul { margin: 0; padding-left: 20px; }
+    #texte-contenu li { margin-bottom: 8px; }
+    #texte-contenu li strong { font-family: var(--police-titre); font-weight: 600; }
+
+    @media (max-width: 640px) {
+      #identite strong { font-size: 17px; }
+      #identite span { font-size: 15px; }
+      #outils { top: calc(max(14px, env(safe-area-inset-top)) + 74px); left: max(14px, env(safe-area-inset-left)); right: auto; justify-content: flex-start; }
+      #station { min-width: 110px; }
+      #aide { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #chargement::after { animation: none; }
+      #chargement { transition: none; }
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="chargement" role="status">Ouverture de la galerie</div>
+
+  <header id="identite" hidden>
+    <strong id="h-nom"></strong>
+    <span id="h-metier"></span>
+  </header>
+
+  <div id="outils" hidden>
+    <button id="b-son" type="button" aria-pressed="false">Activer le son</button>
+    <button id="b-texte" type="button">Version texte</button>
+    <span id="vr-slot"></span>
+  </div>
+
+  <div id="bas" hidden>
+    <nav id="sommaire" aria-label="Sections du portfolio"></nav>
+    <div id="commandes">
+      <button id="b-prec" type="button">Précédent</button>
+      <div id="station" aria-live="polite">
+        <span id="s-label"></span>
+        <span id="s-compteur"></span>
+      </div>
+      <button id="b-suiv" type="button">Suivant</button>
+    </div>
+    <p id="aide">Faites glisser pour regarder autour. Les flèches du clavier font avancer.</p>
+  </div>
+
+  <dialog id="texte" aria-labelledby="texte-titre">
+    <div class="dlg-tete">
+      <h2 id="texte-titre">Version texte du portfolio</h2>
+      <button id="b-fermer" type="button">Fermer</button>
+    </div>
+    <div id="texte-contenu"></div>
+  </dialog>
+
+  <div id="message" hidden>
+    <h1 id="message-titre"></h1>
+    <p id="message-texte"></p>
+  </div>
+
+  <noscript>
+    <div style="position:fixed;inset:0;z-index:30;background:#cfd0cc;display:grid;place-content:center;padding:24px;text-align:center;font:18px sans-serif">
+      Ce portfolio en réalité virtuelle a besoin de JavaScript pour fonctionner.
+    </div>
+  </noscript>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

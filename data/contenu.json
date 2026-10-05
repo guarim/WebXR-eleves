@@ -1,0 +1,58 @@
+{
+  "eleve": {
+    "nom": "Prénom NOM",
+    "metier": "Peintre en bâtiment",
+    "accroche": "Précision, patience et goût du travail bien fini."
+  },
+  "presentation": {
+    "titre": "Présentation",
+    "texte": "Je m'appelle Prénom et je prépare mon entrée dans les métiers du bâtiment. J'aime travailler de mes mains, voir un chantier avancer et être fier de ce que je laisse derrière moi.\n\nCe portfolio rassemble mes premières réalisations, mes compétences et mon parcours de formation. Bonne visite !"
+  },
+  "qualites": {
+    "titre": "Qualités",
+    "items": [
+      { "titre": "Rigueur", "detail": "Je soigne les finitions et je vérifie mon travail avant de passer à l'étape suivante." },
+      { "titre": "Ponctualité", "detail": "Je suis à l'heure et je prévois mon matériel à l'avance." },
+      { "titre": "Esprit d'équipe", "detail": "Je communique avec mes collègues et j'écoute les conseils des anciens." },
+      { "titre": "Sécurité", "detail": "Je porte mes protections et je range mon poste de travail." }
+    ]
+  },
+  "competences": {
+    "titre": "Compétences",
+    "items": [
+      { "titre": "Préparer les supports", "detail": "Protéger, poncer, reboucher et enduire les surfaces." },
+      { "titre": "Appliquer les revêtements", "detail": "Peinture, lasure, enduit décoratif, pose de papier peint." },
+      { "titre": "Lire un plan", "detail": "Comprendre les cotes et les consignes d'un chantier." },
+      { "titre": "Utiliser les outils", "detail": "Rouleau, pinceau, ponceuse, échafaudage et échelle en sécurité." }
+    ]
+  },
+  "formation": {
+    "titre": "Formation",
+    "items": [
+      { "titre": "CAP Peintre applicateur de revêtements", "detail": "Lycée professionnel, 2024 – 2026" },
+      { "titre": "Stage en entreprise", "detail": "Entreprise de peinture, 6 semaines, 2025" },
+      { "titre": "Attestation de sécurité", "detail": "Travail en hauteur et gestes de premiers secours" }
+    ]
+  },
+  "contact": {
+    "titre": "Contact",
+    "items": [
+      { "titre": "Courriel", "detail": "prenom.nom@exemple.fr" },
+      { "titre": "Téléphone", "detail": "06 00 00 00 00" },
+      { "titre": "Ville", "detail": "Dunkerque" }
+    ]
+  },
+  "oeuvres": [
+    { "fichier": "1.png", "titre": "Réalisation 1", "legende": "Décrivez ici le chantier, la technique employée et la date." },
+    { "fichier": "2.png", "titre": "Réalisation 2", "legende": "Décrivez ici le chantier, la technique employée et la date." },
+    { "fichier": "3.png", "titre": "Réalisation 3", "legende": "Décrivez ici le chantier, la technique employée et la date." },
+    { "fichier": "4.png", "titre": "Réalisation 4", "legende": "Décrivez ici le chantier, la technique employée et la date." },
+    { "fichier": "5.png", "titre": "Réalisation 5", "legende": "Décrivez ici le chantier, la technique employée et la date." },
+    { "fichier": "6.png", "titre": "Réalisation 6", "legende": "Décrivez ici le chantier, la technique employée et la date." }
+  ],
+  "video": {
+    "fichier": "1.mp4",
+    "titre": "En action",
+    "legende": "Une courte vidéo de mon travail sur chantier ou en atelier."
+  }
+}
